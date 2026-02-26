@@ -4,19 +4,19 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 KIRO_DIR="${HOME}/.kiro"
 
-echo "🏯 三國 Kiro CLI Agent System — 安裝程式"
-echo "=========================================="
+echo "Three Kingdoms Kiro CLI Agent System"
+echo "三國 Kiro CLI Agent 系統 — 安裝程式"
+echo "======================================"
 echo ""
-echo "來源: ${REPO_DIR}"
-echo "目標: ${KIRO_DIR}"
+echo "Source | 來源: ${REPO_DIR}"
+echo "Target | 目標: ${KIRO_DIR}"
 echo ""
 
-# --- helpers ---
 backup_if_exists() {
   local target="$1"
   if [ -e "$target" ]; then
     local bak="${target}.bak.$(date +%Y%m%d%H%M%S)"
-    echo "  ⚠️  備份: $(basename "$target") → $(basename "$bak")"
+    echo "  [backup] $(basename "$target") -> $(basename "$bak")"
     cp -r "$target" "$bak"
   fi
 }
@@ -37,11 +37,10 @@ copy_dir() {
     fi
     count=$((count + 1))
   done
-  echo "  ✅ ${label}: ${count} 個項目"
+  echo "  [ok] ${label}: ${count} items"
 }
 
-# --- install ---
-echo "📦 安裝中..."
+echo "Installing..."
 echo ""
 
 # Agents
@@ -57,22 +56,22 @@ for skill_dir in "$REPO_DIR/skills"/*/; do
   mkdir -p "$KIRO_DIR/skills/$skill_name"
   cp "$skill_dir"/* "$KIRO_DIR/skills/$skill_name/" 2>/dev/null || true
 done
-echo "  ✅ Skills: $(ls -d "$REPO_DIR/skills"/*/ 2>/dev/null | wc -l | tr -d ' ') 個項目"
+echo "  [ok] Skills: $(ls -d "$REPO_DIR/skills"/*/ 2>/dev/null | wc -l | tr -d ' ') items"
 
 echo ""
-echo "=========================================="
-echo "🎉 安裝完成！"
+echo "======================================"
+echo "Done! | 安裝完成"
 echo ""
-echo "使用方式:"
-echo "  kiro-cli chat              # 開始對話"
-echo "  說「眾將聽令」              # 啟動完整工作流"
-echo "  說「叫趙雲來寫這個功能」    # 呼叫特定將領"
+echo "Usage | 使用方式:"
+echo "  kiro-cli chat                # Start a conversation"
+echo '  Say "眾將聽令"               # Trigger full workflow'
+echo '  Say "叫趙雲來寫這個功能"     # Call a specific agent'
 echo ""
-echo "將領一覽:"
-echo "  諸葛亮(zhuge)    策劃全局    關羽(guanyu)    Code Review"
-echo "  趙雲(zhaoyun)    核心實作    張飛(zhangfei)  Bug 獵殺"
-echo "  周瑜(zhouyu)     UI/UX      小喬(xiaoqiao)  視覺/文案"
-echo "  曹操(caocao)     自動化部署  龐統(pangtong)  架構審計"
-echo "  郭嘉(guojia)     研究/模型   荀彧(xunyu)     任務整合"
-echo "  黃忠(huangzhong) Staff審查   魯肅(lusu)      UX流程"
-echo "=========================================="
+echo "Agents | 將領:"
+echo "  zhuge       Strategy        guanyu      Code Review"
+echo "  zhaoyun     Implementation  zhangfei    Bug Hunting"
+echo "  zhouyu      UI/UX           xiaoqiao    Visual/Copy"
+echo "  caocao      CI/CD/Deploy    pangtong    Architecture"
+echo "  guojia      Research        xunyu       Task Integration"
+echo "  huangzhong  Staff Review    lusu        UX Flow"
+echo "======================================"

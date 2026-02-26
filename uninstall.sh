@@ -14,16 +14,17 @@ ITEMS=(
   "skills/review-template"
 )
 
-echo "🗑️  三國 Kiro CLI Agent System — 移除程式"
+echo "Three Kingdoms Kiro CLI — Uninstall | 移除程式"
 echo ""
 
 for item in "${ITEMS[@]}"; do
   target="$KIRO_DIR/$item"
   if [ -e "$target" ]; then
     rm -rf "$target"
-    echo "  ✅ 已移除: $item"
+    echo "  [removed] $item"
   fi
 done
 
 echo ""
-echo "移除完成。你的其他 Kiro 設定不受影響。"
+echo "Done. Your other Kiro settings are untouched."
+echo "移除完成。其他 Kiro 設定不受影響。"
