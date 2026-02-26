@@ -32,3 +32,20 @@ inclusion: always
 
 ### 驗證（任何交付前）
 build → type check → lint → test(80%+) → security scan → git status
+
+## Handoff Protocol
+
+When completing a task as subagent, end your response with:
+
+---HANDOFF---
+outcome: [one sentence]
+files_changed: [file paths, max 10]
+decisions: [max 3 bullets]
+risks: [max 2 bullets]
+next: [what next agent should focus on]
+---END---
+
+Rules:
+- Keep handoff under 200 words
+- Code belongs in files, not in handoff
+- If no files changed, state what was analyzed or decided
