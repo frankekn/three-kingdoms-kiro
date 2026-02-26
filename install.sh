@@ -1,77 +1,61 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+set -e
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
-KIRO_DIR="${HOME}/.kiro"
-
-echo "Three Kingdoms Kiro CLI Agent System"
-echo "三國 Kiro CLI Agent 系統 — 安裝程式"
-echo "======================================"
-echo ""
-echo "Source | 來源: ${REPO_DIR}"
-echo "Target | 目標: ${KIRO_DIR}"
-echo ""
-
-backup_if_exists() {
-  local target="$1"
-  if [ -e "$target" ]; then
-    local bak="${target}.bak.$(date +%Y%m%d%H%M%S)"
-    echo "  [backup] $(basename "$target") -> $(basename "$bak")"
-    cp -r "$target" "$bak"
-  fi
-}
-
-copy_dir() {
-  local src="$1" dst="$2" label="$3"
-  mkdir -p "$dst"
-  local count=0
-  for f in "$src"/*; do
-    [ -e "$f" ] || continue
-    local name=$(basename "$f")
-    if [ -d "$f" ]; then
-      mkdir -p "$dst/$name"
-      cp -r "$f"/* "$dst/$name"/ 2>/dev/null || true
-    else
-      backup_if_exists "$dst/$name"
-      cp "$f" "$dst/$name"
-    fi
-    count=$((count + 1))
+install_kiro() {
+  echo "[Kiro CLI] Installing..."
+  mkdir -p ~/.kiro/agents ~/.kiro/steering ~/.kiro/skills
+  cp "$SCRIPT_DIR"/kiro/agents/*.json ~/.kiro/agents/
+  cp "$SCRIPT_DIR"/kiro/steering/*.md ~/.kiro/steering/
+  for d in "$SCRIPT_DIR"/kiro/skills/*/; do
+    name=$(basename "$d")
+    mkdir -p ~/.kiro/skills/"$name"
+    cp "$d"SKILL.md ~/.kiro/skills/"$name"/
   done
-  echo "  [ok] ${label}: ${count} items"
+  echo "[Kiro CLI] Done. Files installed to ~/.kiro/"
 }
 
-echo "Installing..."
-echo ""
+install_claude_code() {
+  echo "[Claude Code] Installing..."
+  mkdir -p ~/.claude/agents ~/.claude/skills
+  cp "$SCRIPT_DIR"/claude-code/agents/*.md ~/.claude/agents/
+  cp "$SCRIPT_DIR"/claude-code/CLAUDE.md ~/.claude/CLAUDE.md
+  for d in "$SCRIPT_DIR"/claude-code/skills/*/; do
+    name=$(basename "$d")
+    mkdir -p ~/.claude/skills/"$name"
+    cp "$d"SKILL.md ~/.claude/skills/"$name"/
+  done
+  echo "[Claude Code] Done. Files installed to ~/.claude/"
+}
 
-# Agents
-copy_dir "$REPO_DIR/agents" "$KIRO_DIR/agents" "Agents"
+show_menu() {
+  echo "Three Kingdoms Agent System - Install"
+  echo "--------------------------------------"
+  echo "Select platform:"
+  echo "  [1] Kiro CLI only"
+  echo "  [2] Claude Code only"
+  echo "  [3] Both"
+  echo "  [q] Quit"
+  echo ""
+  printf "Choice: "
+  read -r choice
+  case "$choice" in
+    1) install_kiro ;;
+    2) install_claude_code ;;
+    3) install_kiro; echo ""; install_claude_code ;;
+    q|Q) echo "Cancelled."; exit 0 ;;
+    *) echo "Invalid choice."; exit 1 ;;
+  esac
+}
 
-# Steering
-copy_dir "$REPO_DIR/steering" "$KIRO_DIR/steering" "Steering"
-
-# Skills
-for skill_dir in "$REPO_DIR/skills"/*/; do
-  [ -d "$skill_dir" ] || continue
-  skill_name=$(basename "$skill_dir")
-  mkdir -p "$KIRO_DIR/skills/$skill_name"
-  cp "$skill_dir"/* "$KIRO_DIR/skills/$skill_name/" 2>/dev/null || true
-done
-echo "  [ok] Skills: $(ls -d "$REPO_DIR/skills"/*/ 2>/dev/null | wc -l | tr -d ' ') items"
-
-echo ""
-echo "======================================"
-echo "Done! | 安裝完成"
-echo ""
-echo "Usage | 使用方式:"
-echo "  kiro-cli chat                # Start a conversation"
-echo '  Say "眾將聽令"               # Trigger full workflow'
-echo '  Say "叫趙雲來寫這個功能"     # Call a specific agent'
-echo ""
-echo "Agents | 將領:"
-echo "  zhuge       Strategy        guanyu      Code Review"
-echo "  zhaoyun     Implementation  zhangfei    Bug Hunting"
-echo "  zhouyu      UI/UX           xiaoqiao    Visual/Copy"
-echo "  caocao      CI/CD/Deploy    pangtong    Architecture"
-echo "  guojia      Research        xunyu       Task Integration"
-echo "  huangzhong  Staff Review    lusu        UX Flow"
-echo "======================================"
+case "${1:-}" in
+  --kiro)        install_kiro ;;
+  --claude-code) install_claude_code ;;
+  --both)        install_kiro; echo ""; install_claude_code ;;
+  --help|-h)
+    echo "Usage: ./install.sh [--kiro|--claude-code|--both]"
+    echo "  No arguments: interactive menu"
+    ;;
+  "") show_menu ;;
+  *)  echo "Unknown option: $1"; echo "Usage: ./install.sh [--kiro|--claude-code|--both]"; exit 1 ;;
+esac

@@ -1,10 +1,22 @@
-# Three Kingdoms Kiro CLI Agent System
+# Three Kingdoms Agent System
 
-[繁體中文說明](docs/README.zh-TW.md)
+A multi-agent development system themed after the Three Kingdoms era, with 12 specialized AI agents for software development workflows.
 
-A multi-agent development system for [Kiro CLI](https://kiro.dev), inspired by the Three Kingdoms era. 12 specialized AI agents collaborate through structured workflows — from planning to deployment.
+Supports both **Kiro CLI** and **Claude Code**.
 
-Design principles from [everything-claude-code](https://github.com/affaan-m/everything-claude-code), re-engineered for Kiro CLI's architecture with strict token budget control.
+[Traditional Chinese / 繁體中文](docs/README.zh-TW.md)
+
+---
+
+## Platforms
+
+| Feature | Kiro CLI | Claude Code |
+|---------|----------|-------------|
+| Agents | 12 JSON files | 12 Markdown files |
+| Steering / Memory | `steering/*.md` (always-on) | `CLAUDE.md` (always-on) |
+| Skills | 10 skill directories | 10 skill directories |
+| Subagent tool | `use_subagent` | `Task` |
+| Install path | `~/.kiro/` | `~/.claude/` |
 
 ---
 
@@ -16,119 +28,77 @@ cd three-kingdoms-kiro
 ./install.sh
 ```
 
-Copies agents, steering, and skills into `~/.kiro/`. Existing files are backed up automatically (`.bak`).
+Interactive menu lets you choose:
+- [1] Kiro CLI only
+- [2] Claude Code only
+- [3] Both
 
-### Uninstall
+Or use CLI flags:
 
 ```bash
-./uninstall.sh
+./install.sh --kiro          # Kiro CLI only
+./install.sh --claude-code   # Claude Code only
+./install.sh --both          # Both platforms
 ```
 
-Removes only Three Kingdoms files. Your other Kiro settings are untouched.
+## Uninstall
+
+```bash
+./uninstall.sh               # Interactive menu
+./uninstall.sh --both        # Remove from both platforms
+```
 
 ---
 
 ## Agents
 
-| Name | Agent | Role | Hooks |
-|------|-------|------|-------|
-| Zhuge Liang | `zhuge` | Strategy and orchestration | stop |
-| Zhao Yun | `zhaoyun` | Core implementation | postToolUse, stop |
-| Guan Yu | `guanyu` | Staff-level code review | agentSpawn |
-| Zhang Fei | `zhangfei` | Bug hunting and stress testing | preToolUse |
-| Zhou Yu | `zhouyu` | UI/UX engineering | postToolUse |
-| Xiao Qiao | `xiaoqiao` | Visual, copy, micro-interaction | postToolUse |
-| Cao Cao | `caocao` | Automation, CI/CD, deploy | preToolUse |
-| Pang Tong | `pangtong` | Architecture audit | — |
-| Guo Jia | `guojia` | Research, models, algorithms | — |
-| Xun Yu | `xunyu` | Task integration and delivery | — |
-| Huang Zhong | `huangzhong` | Independent staff review | agentSpawn |
-| Lu Su | `lusu` | UX flow, information architecture | postToolUse |
+| Chinese | Agent Name | Role |
+|---------|-----------|------|
+| Zhuge Liang / 諸葛亮 | zhuge | Strategy, orchestration, task delegation |
+| Zhao Yun / 趙雲 | zhaoyun | Core code implementation |
+| Guan Yu / 關羽 | guanyu | Staff-level code review |
+| Zhang Fei / 張飛 | zhangfei | Bug hunting, stress testing |
+| Zhou Yu / 周瑜 | zhouyu | UI/UX engineering |
+| Xiao Qiao / 小喬 | xiaoqiao | Visual design, copy, micro-interactions |
+| Cao Cao / 曹操 | caocao | CI/CD, automation, deployment |
+| Pang Tong / 龐統 | pangtong | Architecture audit |
+| Guo Jia / 郭嘉 | guojia | Research, algorithms, models |
+| Xun Yu / 荀彧 | xunyu | Task integration, breakdown |
+| Huang Zhong / 黃忠 | huangzhong | Staff review gatekeeper |
+| Lu Su / 魯肅 | lusu | UX flow, information architecture |
 
 ---
 
-## Usage
+## Workflows
 
-### Full workflow
+### Feature
+Zhuge Liang plans -> Guo Jia researches -> Pang Tong audits -> Xun Yu breaks down tasks -> Zhao Yun + Zhou Yu implement (TDD) -> Guan Yu + Huang Zhong review -> Cao Cao deploys
 
-Say "Assemble the generals" or the Chinese equivalent to trigger the full pipeline:
+### Bugfix
+Zhuge Liang locates -> Zhang Fei hunts -> Zhao Yun fixes (TDD) -> Guan Yu reviews
 
-```
-Zhuge Liang (plan) --> Guo Jia (research) --> Pang Tong (audit)
---> Xun Yu (task breakdown) --> Zhao Yun + Zhou Yu (implement with TDD)
---> Guan Yu + Huang Zhong (review) --> Cao Cao (deploy)
-```
+### Refactor
+Pang Tong audits architecture -> Zhuge Liang plans -> Zhao Yun refactors -> Guan Yu + Huang Zhong review
 
-### Call a specific agent
-
-```
-Get Zhao Yun to implement this API
-Have Guan Yu review this
-Send Zhang Fei to hunt this bug
-```
-
-### Workflow templates
-
-| Scenario | Pipeline |
-|----------|----------|
-| Feature | Zhuge --> Guo Jia --> Pang Tong --> Xun Yu --> Zhao Yun+Zhou Yu (TDD) --> Guan Yu+Huang Zhong --> Cao Cao |
-| Bugfix | Zhuge --> Zhang Fei --> Zhao Yun (TDD) --> Guan Yu |
-| Refactor | Pang Tong --> Zhuge --> Zhao Yun --> Guan Yu+Huang Zhong |
-| Security | Huang Zhong+Guan Yu --> Pang Tong --> Zhao Yun |
+### Security
+Huang Zhong + Guan Yu review -> Pang Tong audits architecture -> Zhao Yun fixes
 
 ---
 
 ## Skills
 
-Skills activate automatically when your request matches their description. You can also invoke them manually with `/`.
-
-| Skill | Trigger keywords | Source |
-|-------|-----------------|--------|
-| `verify-pipeline` | verify, pre-PR check | ECC verification-loop |
-| `tdd-flow` | TDD, write tests first | ECC tdd-workflow |
-| `security-audit` | security, secrets, injection | ECC security-review |
-| `search-before-code` | existing solution, search first | ECC search-first |
-| `refactor-clean` | cleanup, dead code | ECC refactor-clean |
-| `deploy-checklist` | deploy, CI/CD | ECC deployment-patterns |
-| `prd-template` | PRD, requirements | — |
-| `design-template` | architecture, design doc | — |
-| `task-template` | task breakdown | — |
-| `review-template` | code review report | — |
-
----
-
-## Architecture
-
-```
-~/.kiro/
-  steering/                      # Always loaded (< 2.5KB total)
-    three-kingdoms.md            #   Agent dispatch table
-    dev-standards.md             #   Dev standards + workflow templates
-  skills/                        # Loaded on demand (< 1.2KB each)
-    verify-pipeline/             #   build > type > lint > test > security
-    tdd-flow/                    #   RED > GREEN > REFACTOR
-    security-audit/              #   Security checklist
-    search-before-code/          #   Research before coding
-    refactor-clean/              #   Dead code removal
-    deploy-checklist/            #   CI/CD checklist
-    prd-template/                #   PRD format
-    design-template/             #   Architecture doc format
-    task-template/               #   Task list format
-    review-template/             #   Review report format
-  agents/                        # 12 Three Kingdoms agents
-    zhuge.json
-    zhaoyun.json
-    ...
-```
-
-### Token budget
-
-| Layer | Size | When loaded |
-|-------|------|-------------|
-| Steering | ~2.3KB | Every conversation |
-| Skills | ~1KB each | On match |
-| Agent prompt | ~0.6KB each | On invocation |
-| Hooks | 0 | Shell commands, no context cost |
+| Skill | Description |
+|-------|-------------|
+| verify-pipeline | Build, type check, lint, test, security scan |
+| tdd-flow | Test-driven development workflow |
+| security-audit | Security review checklist |
+| search-before-code | Search existing solutions before writing new code |
+| refactor-clean | Dead code removal, dependency cleanup |
+| deploy-checklist | Deployment verification checklist |
+| prd-template | Product requirements document template |
+| design-template | System design document template |
+| task-template | Task breakdown template |
+| review-template | Code review report template |
 
 ---
 
@@ -158,22 +128,33 @@ Rules:
 
 Automated checks on agent lifecycle events. No context window cost.
 
-| Agent | Event | Behavior |
-|-------|-------|----------|
-| Zhao Yun | `stop` | Reminds to run verify pipeline |
-| Zhao Yun | `postToolUse` | UX-Guard check after file write |
-| Guan Yu | `agentSpawn` | Reminds to read git diff first |
-| Zhang Fei | `preToolUse` | Caution before bash execution |
-| Cao Cao | `preToolUse` | Reminds dry-run before deploy |
-| Zhuge Liang | `stop` | Progress check reminder |
-| Huang Zhong | `agentSpawn` | Review reminder on spawn |
+| Agent | Event | Action |
+|-------|-------|--------|
+| Zhao Yun | stop | Verify pipeline reminder |
+| Guan Yu | agentSpawn | Read diff first |
+| Zhang Fei | preToolUse (shell) | Caution before destructive commands |
+| Cao Cao | preToolUse (shell) | Dry-run reminder |
+| Zhuge Liang | stop | Progress check |
 
 ---
 
-## Credits
+## Repo Structure
 
-- [everything-claude-code](https://github.com/affaan-m/everything-claude-code) — Workflow and skill design inspiration
-- [Kiro CLI](https://kiro.dev) — Agent platform
+```
+three-kingdoms-kiro/
+  kiro/                      # Kiro CLI files
+    agents/*.json            # 12 agent definitions
+    steering/*.md            # Always-on context
+    skills/*/SKILL.md        # 10 reusable skills
+  claude-code/               # Claude Code files
+    agents/*.md              # 12 agent definitions
+    CLAUDE.md                # Always-on context
+    skills/*/SKILL.md        # 10 reusable skills
+  install.sh                 # Interactive installer
+  uninstall.sh               # Interactive uninstaller
+```
+
+---
 
 ## License
 
