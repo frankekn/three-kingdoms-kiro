@@ -132,6 +132,28 @@ Skills activate automatically when your request matches their description. You c
 
 ---
 
+## Handoff Protocol
+
+When agents are chained in a workflow, each agent ends its response with a structured handoff block. This keeps inter-agent context compact and prevents context window overflow.
+
+```
+---HANDOFF---
+outcome: [one sentence summary]
+files_changed: [file paths, max 10]
+decisions: [max 3 bullets]
+risks: [max 2 bullets]
+next: [what the next agent should focus on]
+---END---
+```
+
+Rules:
+- Handoff must be under 200 words
+- Code belongs in files, not in the handoff
+- Zhuge Liang (orchestrator) extracts only the handoff block when relaying context to the next agent
+- When more than 5 handoffs accumulate, only the first and last 3 are kept
+
+---
+
 ## Hooks
 
 Automated checks on agent lifecycle events. No context window cost.

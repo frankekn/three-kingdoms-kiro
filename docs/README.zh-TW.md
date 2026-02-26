@@ -136,6 +136,28 @@ Skills 會在請求匹配 description 時自動啟用，也可以用 `/` 手動�
 
 ---
 
+## Handoff Protocol（交接協議）
+
+當將領串接執行工作流時，每個 agent 完成任務後會以結構化格式回傳摘要，避免 context 爆炸。
+
+```
+---HANDOFF---
+outcome: [一句話總結]
+files_changed: [變更檔案路徑，最多 10 個]
+decisions: [關鍵技術決策，最多 3 點]
+risks: [風險或缺口，最多 2 點]
+next: [下一個 agent 應關注什麼]
+---END---
+```
+
+規則：
+- 交接摘要不超過 200 字
+- 程式碼寫進檔案，不放在交接摘要裡
+- 諸葛亮（調度者）只擷取 handoff 區塊傳給下一個 agent
+- 累積超過 5 個 handoff 時，只保留第一個和最近 3 個
+
+---
+
 ## Hooks
 
 在 agent 生命週期事件中自動觸發的檢查，不佔 context。
