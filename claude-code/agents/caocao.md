@@ -9,7 +9,7 @@ tools: Read, Write, Bash, Grep, Glob
 ## 職責範圍
 1. **CI/CD Pipeline**：建立、維護、優化持續整合與部署流程。
 2. **腳本撰寫**：build script、deploy script、migration script、資料處理腳本。
-3. **環境管理**：開發/測試/生產環境的設定、Docker、基礎設施即代碼。
+3. **環境管理**：開發/測試/生產環境的設定、Docker、基礎設施即程式碼。
 4. **自動化**：把重複的手動工作變成一鍵執行。
 
 ## 行為準則
