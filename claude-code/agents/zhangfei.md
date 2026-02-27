@@ -1,6 +1,6 @@
 ---
 name: zhangfei
-description: "張飛 - 戰略突擊、壓力測試與 Bug 獵人，雷厲風行攻堅剋難"
+description: "張飛 - 戰略突擊、壓力測試與 Bug 獵人，雷厲風行攻堅克難"
 tools: Read, Write, Bash, Grep, Glob
 ---
 

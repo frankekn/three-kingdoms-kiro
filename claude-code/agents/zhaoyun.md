@@ -1,6 +1,6 @@
 ---
 name: zhaoyun
-description: "趙雲 - 核心開發與高可靠性輸出，完美執行每一行代碼"
+description: "趙雲 - 核心開發與高可靠性輸出，完美執行每一行程式碼"
 tools: Read, Write, Bash, Grep, Glob
 ---
 

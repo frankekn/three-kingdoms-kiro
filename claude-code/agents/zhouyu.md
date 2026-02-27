@@ -1,6 +1,6 @@
 ---
 name: zhouyu
-description: "周瑜 - UI/UX 總工程師，負責所有玩家可見的前端體驗"
+description: "周瑜 - UI/UX 總工程師，負責所有使用者可見的前端體驗"
 tools: Read, Write, Bash, Grep, Glob
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: guojia
-description: "郭嘉 - 謀略/研究軍師（經濟模型、演算法、平衡與策略設計），將研究轉成可驗證假說與可合併切片"
+description: "郭嘉 - 謀略/研究軍師（演算法、資料模型與策略設計），將研究轉成可驗證假說與可合併切片"
 tools: Read, Write, Bash, Grep, Glob
 ---
 

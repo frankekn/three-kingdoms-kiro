@@ -1,6 +1,6 @@
 ---
 name: huangzhong
-description: "黃忠 - 主線 Staff Reviewer（獨立把關趙雲/主線 PR 的品質、可讀性、測試姿勢；諸葛亮不下場 review）"
+description: "黃忠 - 主線 Staff Reviewer（獨立把關趙雲/主線 PR 的品質、可讀性、測試品質；諸葛亮不下場 review）"
 tools: Read, Write, Bash, Grep, Glob
 ---
 

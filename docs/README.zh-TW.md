@@ -13,7 +13,7 @@
 | 功能 | Kiro CLI | Claude Code |
 |------|----------|-------------|
 | Agent 格式 | 12 個 JSON 檔 | 12 個 Markdown 檔 |
-| 常駐指令 | `steering/*.md` | `CLAUDE.md` |
+| 常駐指引 | `steering/*.md` | `CLAUDE.md` |
 | 技能 | 10 個技能目錄 | 10 個技能目錄 |
 | 子代理工具 | `use_subagent` | `Task` |
 | 安裝路徑 | `~/.kiro/` | `~/.claude/` |
@@ -141,3 +141,20 @@ next: [下一個 agent 應關注什麼]
 ## 授權
 
 MIT
+
+## 目錄結構
+
+```
+three-kingdoms-kiro/
+  kiro/                      # Kiro CLI 檔案
+    agents/*.json            # 12 個 agent 定義
+    steering/*.md            # 常駐指引
+    skills/*/SKILL.md        # 10 個可重用技能
+  claude-code/               # Claude Code 檔案
+    agents/*.md              # 12 個 agent 定義
+    CLAUDE.md                # 常駐指引
+    skills/*/SKILL.md        # 10 個可重用技能
+  install.sh                 # 互動式安裝腳本
+  uninstall.sh               # 互動式移除腳本
+```
+

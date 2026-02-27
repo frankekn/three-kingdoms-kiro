@@ -1,6 +1,6 @@
 ---
 name: xunyu
-description: "荀彧 - 幕僚總管（整合/製作人）：把偵察與想法落地成可合併的最小切片，推進遊戲本身"
+description: "荀彧 - 幕僚總管（整合/製作人）：把偵察與想法落地成可合併的最小切片，推進專案進度"
 tools: Read, Write, Bash, Grep, Glob
 ---
 
