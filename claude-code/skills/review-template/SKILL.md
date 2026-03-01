@@ -1,9 +1,33 @@
 ---
 name: review-template
-description: "Code Review 報告格式模板。當需要進行 code review、PR review、品質審查時使用。"
+description: Code Review 完整 SOP。進行 code review、diff 審計、範圍確認、gate 驗證時使用。
 ---
 
-# Code Review 報告格式
+# Code Review SOP
+
+## Review 動作清單
+
+### Phase 1: 範圍確認
+```bash
+git log --oneline $TASK_START..HEAD
+```
+比對預期 commit 數量，非預期 commit 立即回報。
+
+### Phase 2: 變更審計
+```bash
+git diff --stat $TASK_START..HEAD
+```
+確認只有預期類型的檔案被修改（.md / .ts / .py）。
+
+### Phase 3: 行為驗證
+- 非文件類變更逐一確認是否改變行為
+- 刪除的 code 用 grep 確認 0 imports
+
+### Phase 4: Gate
+跑完整測試套件，比對基線數字。
+
+### Phase 5: 產出報告
+使用下方輸出結構。
 
 ## 輸出結構
 
