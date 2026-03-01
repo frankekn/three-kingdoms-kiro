@@ -16,6 +16,10 @@ inclusion: always
 格式：`<type>: <description>`
 類型：feat / fix / refactor / docs / test / chore / perf / ci
 
+## Diff 審計（推送前）
+- 推送前：`git log --oneline $TASK_START..HEAD` 確認 commit 清單符合預期
+- 非預期 commit → 跑 gate 確認基線 → 標記來源 → 決定是否一起推
+
 ## 工作流模板
 
 ### 新功能（feature）
@@ -40,6 +44,7 @@ When completing a task as subagent, end your response with:
 ---HANDOFF---
 outcome: [one sentence]
 files_changed: [file paths, max 10]
+commits: [hash + 簡述, max 5]
 decisions: [max 3 bullets]
 risks: [max 2 bullets]
 next: [what next agent should focus on]
